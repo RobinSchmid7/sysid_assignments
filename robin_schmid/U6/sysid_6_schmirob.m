@@ -37,15 +37,15 @@ u = [u_period; u_period];
 % plot(1:size(u,1),u);
 
 % Create Toeplitz matrix
-Phi_u = toeplitz(u, zeros(1,tau_max)); % Usage: columns, rows
+Phi_u = toeplitz(u, zeros(1,tau_max)); % Usage: columns, rows, comuns are dominant
 
 % Two experiments
 g_est = zeros(tau_max,2);
 for i = 1:2
     % Noise distrubution, assume Gaussian with variance 0.05
-    v = sqrt(0.05)*randn(K, 1);
+    v = sqrt(0.05)*randn(K, 1); % Use different noise in each loop, could also just not save it ever
 
-    y = zeros(K,1);
+    y = zeros(K,1); % Reset data
     y(1) = v(1);
     for t = 1:K-1
         y(t+1) = 5/8*y(t) + 11/10*u(t) + v(t+1);
@@ -57,6 +57,14 @@ end
 
 % Average estimates
 g_mean = mean(g_est,2);
+
+f2 = figure(2);
+set(f2, 'visible', 'off');
+plot(1:tau_max, g_mean, 'b-');
+title('Pulse response with 2 periods and average');
+xlabel('tau');
+ylabel('Mean pulse response');
+grid on
 
 %% 2. Apply N periods
 tau_max = 80;
@@ -97,14 +105,14 @@ for i = 2:30
     g_est_N(:,i) = Phi_u\y;
     
     % Plotting
-    err_N1(i) = norm(g_est_0 - g_est_N(:,i))^2;
+    err_N1(i) = norm(g_est_0 - g_est_N(:,i));
 end
 
 % Error for averaging of part 1
-err_avg = norm(g_est_0(1:tau_max) - g_mean)^2;
+err_avg = norm(g_est_0(1:tau_max) - g_mean);
 
-f2 = figure(2);
-set(f2, 'visible', 'off');
+f3 = figure(3);
+set(f3, 'visible', 'on');
 plot(1:30, err_N1, 'b-');
 hold on
 yline(err_avg, 'r-');
@@ -183,15 +191,15 @@ for i = 2:30
     g_est_N(:,i) = Phi_u\y;
     
     % Plotting
-    err_N2(i) = norm(g_est_0 - g_est_N(:,i))^2;
+    err_N2(i) = norm(g_est_0 - g_est_N(:,i));
 end
 
 % Error for averaging of part 1
-err_avg = norm(g_est_0(1:tau_max) - g_mean)^2;
+err_avg = norm(g_est_0(1:tau_max) - g_mean); % Here just 2 norm asked not squared
 
 % Compare all three methods
-f3 = figure(3);
-set(f3, 'visible', 'on');
+f4 = figure(4);
+set(f4, 'visible', 'on');
 p1 = plot(1:30, err_N1, 'b-');
 hold on
 p2 = yline(err_avg, 'y-');

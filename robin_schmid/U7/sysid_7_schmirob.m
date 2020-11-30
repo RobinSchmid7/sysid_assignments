@@ -1,5 +1,5 @@
-%System Identification Ex 7
-%Author: Robin Schmid, schmirob@ethz.ch
+% System Identification Ex 7
+% Robin Schmid, schmirob@ethz.ch
 %% 1.
 clear all; close all; clc;
 
@@ -32,18 +32,18 @@ for N = N_vec
             y1(i+1) = 0.5*y1(i) + u(i) + w1(i+1);
         end
 
-        % Option 1: Assume system is initially at rest, use full y vector with
-        % data
-        Phi1(1,:) = [0 0];
-        for k = 2:N
-            Phi1(k,:) = [y1(k-1) u(k-1)];
-        end
-
-        % Option 2: Assume data at t = -1 is the same as on t = 0
-        Phi1(1,:) = [y(1) u(1)];
-        for k = 2:N
-            Phi1(k,:) = [y1(k-1) u(k-1)];
-        end
+%         % Option 1: Assume system is initially at rest, use full y vector with
+%         % data
+%         Phi1(1,:) = [0 0];
+%         for k = 2:N
+%             Phi1(k,:) = [y1(k-1) u(k-1)];
+%         end
+% 
+%         % Option 2: Assume data at t = -1 is the same as on t = 0
+%         Phi1(1,:) = [y1(1) u(1)];
+%         for k = 2:N
+%             Phi1(k,:) = [y1(k-1) u(k-1)];
+%         end
 
         % Option 3: Discard negative data, here discard y(1)
         for k = 1:N-1
