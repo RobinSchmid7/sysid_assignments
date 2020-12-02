@@ -44,7 +44,7 @@ for k = 1:n_models
         for jy = 1:n
             % Use at rest assumption
             if (iy-jy) < 1
-                Phiy(iy,jy) = 0;
+                Phiy(iy,jy) = 0; % Not necessary, already initialized with zero
             else
                 Phiy(iy,jy) = -y_LS(iy-jy);
             end
@@ -88,6 +88,36 @@ for k = 1:n_models
     x = lsim(B_LS/A_LS, u);
     
     % Regressor for instrumental variable
+    % Attention: use a new phi here not same as in LS!
+    % Phiy
+    Phiy = zeros(N,n);    
+    for iy = 1:N
+        for jy = 1:n
+            % Use at rest assumption
+            if (iy-jy) < 1
+                Phiy(iy,jy) = 0; % Not necessary, already initialized with zero
+            else
+                Phiy(iy,jy) = -y_IV(iy-jy);
+            end
+        end
+    end
+    
+    % Phiu
+    Phiu = zeros(N,m);
+    for iu = 1:N
+        for ju = 1:m
+            % Use at rest assumption
+            if (iu-ju) < 1
+                Phiu(iu,ju) = 0;
+            else
+                Phiu(iu,ju) = u(iu-ju);
+            end
+        end
+    end
+    
+    Phi_IV = [Phiy Phiu];
+    
+    
     % Zx
     Zx = zeros(N,n);    
     for iy = 1:N
@@ -116,7 +146,7 @@ for k = 1:n_models
     
     Z = [Zx Zu];
     % Instrumental variable regression
-    theta_IV = (Z'*Phi)\(Z'*y_IV);
+    theta_IV = (Z'*Phi_IV)\(Z'*y_IV);
     
     % A_IV
     A_IV = 1;
