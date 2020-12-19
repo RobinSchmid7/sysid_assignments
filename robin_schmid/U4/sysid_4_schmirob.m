@@ -1,5 +1,5 @@
-%System Identification Ex 4
-%Author: Robin Schmid, schmirob@ethz.ch
+% System Identification Ex 4
+% Robin Schmid, schmirob@ethz.ch
 %% a) Generate y
 close all; clear; clc; 
 N = 1024;

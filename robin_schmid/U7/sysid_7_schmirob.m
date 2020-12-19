@@ -46,6 +46,7 @@ for N = N_vec
 %         end
 
         % Option 3: Discard negative data, here discard y(1)
+        % Option 3 and 1 lead to the same solution
         for k = 1:N-1
             Phi1(k,:) = [y1(k) u(k)];
         end
@@ -117,12 +118,11 @@ for N = N_vec
     
     % For bigger N the variance of the estimate decreases, effect of noise
     % gets filtered out, method a) is better than b), i.e. Gaussian noise
-    % is better than uniform noise
+    % is better than uniform noise, i.e. effect is reduced more when using
+    % a LS estimate
 end
 
 %% 2.
-clear all; close all; clc;
-
 % Generate data
 N_vec = 4.^(3:6); % N = [64 256 1024 4096]
 N_exp = 1000;

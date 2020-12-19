@@ -1,4 +1,4 @@
-% System Identification Ex 8
+% System Identification Ex 9
 % Robin Schmid, schmirob@ethz.ch
 %%
 clear all; close all; clc;
@@ -19,7 +19,7 @@ z = tf('z', Ts);
 A_true = 1 - 1.1*z^-1 + 0.18*z^-2;
 B_true = z^-1 - 2*z^-2;
 
-y_true = lsim(B_true/A_true, u); % No noise for true system?
+y_true = lsim(B_true/A_true, u); % No noise for true system
 
 models = [1, 2; 2, 2; 3, 2; 2, 1; 4, 3];
 n_models = size(models,1);

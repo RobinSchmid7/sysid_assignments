@@ -1,5 +1,5 @@
-%System Identification Ex 1
-%Author: Robin Schmid, schmirob@ethz.ch
+% System Identification Ex 1
+% Robin Schmid, schmirob@ethz.ch
 %% 1 (maximum likelihood)
 w = u + 2*u.^2 - u.^3;
 A = w'*w;

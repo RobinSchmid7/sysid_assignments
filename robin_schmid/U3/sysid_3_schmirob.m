@@ -1,5 +1,5 @@
-%System Identification Ex 3
-%Author: Robin Schmid, schmirob@ethz.ch
+% System Identification Ex 3
+% Robin Schmid, schmirob@ethz.ch
 %% 2a
 N = 1024;
 e = randn(N,1); % Generate a random sequence (white Gaussian noise)

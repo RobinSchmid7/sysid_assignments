@@ -1,5 +1,5 @@
-%System Identification Ex 2
-%Author: Robin Schmid, schmirob@ethz.ch
+% System Identification Ex 2
+% Robin Schmid, schmirob@ethz.ch
 %% 3 (maximum likelihood, uncorrelated noise)
 % Intitialize
 importdata('experiment1.dat');

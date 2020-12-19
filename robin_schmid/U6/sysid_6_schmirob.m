@@ -1,9 +1,12 @@
-%System Identification Ex 6
-%Author: Robin Schmid, schmirob@ethz.ch
+% System Identification Ex 6
+% Robin Schmid, schmirob@ethz.ch
 %% 1. Apply 2 periods and average
 clear all; close all; clc;
 tau_max = 80;
 K = 2*tau_max; % Calculation length
+
+a = 5/8;
+b = 11/10;
 
 % Prbs signal with length 80, magnitude 2
 % Attention: prbs function can only create signals with length 2^n-1
@@ -21,9 +24,9 @@ R_u2 = corr_per(u_period2, u_period2);
 
 f1 = figure(1);
 set(f1, 'visible', 'off');
-plot(1:80, R_u1, 'b-');
+plot(1:tau_max, R_u1, 'b-');
 hold on
-plot(1:80, R_u2, 'r-');
+plot(1:tau_max, R_u2, 'r-');
 title('Autocorrelation for 1: idinput() and 2: randi() approach');
 xlabel('Time');
 ylabel('u');
@@ -36,10 +39,11 @@ u_period = u_period2;
 u = [u_period; u_period];
 % plot(1:size(u,1),u);
 
-% Create Toeplitz matrix
+% Create Toeplitz matrix with at rest assumption
 Phi_u = toeplitz(u, zeros(1,tau_max)); % Usage: columns, rows, comuns are dominant
 
-% Two experiments
+% Two experiments with different noise
+% Option 1: Generate y with loop
 g_est = zeros(tau_max,2);
 for i = 1:2
     % Noise distrubution, assume Gaussian with variance 0.05
@@ -48,12 +52,17 @@ for i = 1:2
     y = zeros(K,1); % Reset data
     y(1) = v(1);
     for t = 1:K-1
-        y(t+1) = 5/8*y(t) + 11/10*u(t) + v(t+1);
+        y(t+1) = a*y(t) + b*u(t) + v(t+1);
     end
     % plot(1:size(y,1),y)
     
     g_est(:,i) = Phi_u\y;
 end
+% Option 2: Generate y with lsim
+% z = tf('z',1);
+% A = 1-a*z^-1;
+% B = b*z^-1;
+% y = lsim(B/A,u) + lsim(1/A,v);
 
 % Average estimates
 g_mean = mean(g_est,2);
@@ -92,13 +101,13 @@ for i = 2:30
     y_0 = zeros(K,1);
     y_0(1) = 0;
     for t = 1:K-1
-        y_0(t+1) = 5/8*y_0(t) + 11/10*u(t);
+        y_0(t+1) = a*y_0(t) + b*u(t);
     end
     
     y = zeros(K,1);
     y(1) = v(1);
     for t = 1:K-1
-        y(t+1) = 5/8*y(t) + 11/10*u(t) + v(t+1);
+        y(t+1) = a*y(t) + b*u(t) + v(t+1);
     end
     
     g_est_0 = Phi_u\y_0;
@@ -144,7 +153,7 @@ for i = 1:2
 
     y = zeros(K,1);
     for t = 1:K-1
-        y(t+1) = 5/8*y(t) + 11/10*u(t) + v(t+1);
+        y(t+1) = a*y(t) + b*u(t) + v(t+1);
     end
     % plot(1:size(y,1),y)
     
@@ -179,12 +188,12 @@ for i = 2:30
     
     y_0 = zeros(K,1);
     for t = 1:K-1
-        y_0(t+1) = 5/8*y_0(t) + 11/10*u(t);
+        y_0(t+1) = a*y_0(t) + b*u(t);
     end
     
     y = zeros(K,1);
     for t = 1:K-1
-        y(t+1) = 5/8*y(t) + 11/10*u(t) + v(t+1);
+        y(t+1) = a*y(t) + b*u(t) + v(t+1);
     end
     
     g_est_0 = Phi_u\y_0;
